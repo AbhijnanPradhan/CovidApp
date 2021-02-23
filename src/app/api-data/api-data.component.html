@@ -1,0 +1,76 @@
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand">My Covid App</a>
+      <form class="d-flex">
+        <input class="form-control me-2" type="text" aria-label="Search" 
+        name="region" [(ngModel)]="region" (ngModelChange)="search()" placeholder="Enter State Name">
+      </form>
+    </div>
+</nav>
+<hr/>
+<div>
+    <p class="nav-link" style="align-content: flex-end;" ><b>Last Updated On:</b> {{apiData.lastUpdatedAtApify| date:'medium'}}</p>
+</div>
+<hr/>
+<div>
+    <table class='infoTab'>
+        <tr>
+            <td align="left"><b>Recovery Rate:</b>&nbsp;{{recoveryRate}}</td>
+            <td align="right"><b>Death Rate:</b>&nbsp;{{deathRate}}</td>
+          </tr>
+    </table>
+</div>
+<hr/>
+<div>
+    <table class='dataTable'>
+        <tr>
+            <th (click)="sort('region')"><b>Region</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="sort('totalInfected')"><b>Total Infected</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="sort('newInfected')"><b>New Infected</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="sort('recovered')"><b>Recovered</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="sort('newRecovered')"><b>New Recovered</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="sort('deceased')"><b>Deceased</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+            <th (click)="sort('newDeceased')"><b>New Deceased</b>&nbsp;<fa-icon [icon]="faSort"></fa-icon></th>
+        </tr>
+        <tr *ngFor='let d of apiRegionData | orderBy: key: reverse | paginate: {itemsPerPage:10,currentPage:pgNo};'>
+            <td>{{d.region}}</td>
+            <td>{{d.totalInfected}}</td>
+            <td>{{d.newInfected}}</td>
+            <td>{{d.recovered}}</td>
+            <td>{{d.newRecovered}}</td>
+            <td>{{d.deceased}}</td>
+            <td>{{d.newDeceased}}</td>
+        </tr>
+        <pagination-controls (pageChange) ="pgNo = $event" ></pagination-controls>
+    </table>
+</div>
+<div>
+    <table class="infoTab">
+        <tr>
+            <td>
+                <div class="chart-wrapper">
+                    <canvas baseChart 
+                    [datasets]="barChartData.chartData"
+                    [labels]="barChartData.chartLabels"
+                    [options]="barChartData.chartOptions"
+                    [plugins]="barChartData.chartPlugins"
+                    [legend]="barChartData.chartLegend"
+                    [chartType]="barChartData.chartType">
+                </canvas>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="chart-wrapper">
+                    <canvas baseChart
+                    [datasets]="radarChartData.chartData"
+                    [options]="radarChartData.chartOptions"
+                    [labels]="radarChartData.chartLabels"
+                    [chartType]="radarChartData.chartType">
+                  </canvas>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
